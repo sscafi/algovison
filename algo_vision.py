@@ -11,7 +11,6 @@ gui_active = True
 
 # Example sorting algorithms
 def bubble_sort(arr, draw, pause, explain):
-    explain(f'Initial array: {arr}')
     draw(arr)
     n = len(arr)
     for i in range(n):
@@ -25,12 +24,11 @@ def bubble_sort(arr, draw, pause, explain):
                     return  # Exit if GUI is closed
 
 def insertion_sort(arr, draw, pause, explain):
-    explain(f'Initial array: {arr}')
     draw(arr)
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
-        while j >=0 and key < arr[j]:
+        while j >= 0 and key < arr[j]:
             arr[j + 1] = arr[j]
             draw(arr)
             explain(f'Moving {arr[j]} to the right')
@@ -46,8 +44,6 @@ def insertion_sort(arr, draw, pause, explain):
             return  # Exit if GUI is closed
 
 def quick_sort(arr, low, high, draw, pause, explain):
-    explain(f'Initial array: {arr}')
-    draw(arr)
     if low < high:
         pi = partition(arr, low, high, draw, pause, explain)
         quick_sort(arr, low, pi-1, draw, pause, explain)
@@ -72,8 +68,6 @@ def partition(arr, low, high, draw, pause, explain):
     return i + 1
 
 def merge_sort(arr, draw, pause, explain):
-    explain(f'Initial array: {arr}')
-    draw(arr)
     if len(arr) > 1:
         mid = len(arr) // 2
         L = arr[:mid]
@@ -120,7 +114,6 @@ def merge_sort(arr, draw, pause, explain):
 
 # KMP Search Algorithm
 def kmp_search(text, pattern, explain):
-    explain(f'Text: {text}, Pattern: {pattern}')
     m = len(pattern)
     n = len(text)
 
@@ -295,26 +288,26 @@ def execute_algorithm(algorithm):
 
     if algorithm == "Bubble Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
-        draw(arr)
         explain(f'Initial array: {arr}')
+        draw(arr)  # Display the initial array
         bubble_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "Insertion Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
-        draw(arr)
         explain(f'Initial array: {arr}')
+        draw(arr)  # Display the initial array
         insertion_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "Quick Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
-        draw(arr)
         explain(f'Initial array: {arr}')
+        draw(arr)  # Display the initial array
         quick_sort(arr, 0, len(arr) - 1, draw, 0.5, explain)
 
     elif algorithm == "Merge Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
-        draw(arr)
         explain(f'Initial array: {arr}')
+        draw(arr)  # Display the initial array
         merge_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "KMP Search":
@@ -365,14 +358,24 @@ def execute_algorithm(algorithm):
 root = tk.Tk()
 root.title("Algorithm Visualizer")
 
-# Text box for explanations
-explanation_text = scrolledtext.ScrolledText(root, width=60, height=20, font=('Helvetica', 10))
-explanation_text.pack(pady=10)
+# Create a frame for buttons on the left
+button_frame = tk.Frame(root)
+button_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
-def on_button_click(algorithm):
-    global gui_active  # Allow access to the global variable
-    if gui_active:  # Check if the GUI is active
-        execute_algorithm(algorithm)
+# Create a scrollable frame for buttons
+scrollbar = tk.Scrollbar(button_frame)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+# Create a canvas to hold the buttons
+button_canvas = tk.Canvas(button_frame, yscrollcommand=scrollbar.set)
+button_canvas.pack(side=tk.LEFT)
+
+# Configure the scrollbar
+scrollbar.config(command=button_canvas.yview)
+
+# Create a frame for the buttons inside the canvas
+button_inner_frame = tk.Frame(button_canvas)
+button_canvas.create_window((0, 0), window=button_inner_frame, anchor='nw')
 
 # Create buttons for algorithms
 algorithms = [
@@ -380,8 +383,16 @@ algorithms = [
     "KMP Search", "Dijkstra's Algorithm", "Prim's Algorithm", "Kruskal's Algorithm", "Fibonacci"
 ]
 for algo in algorithms:
-    button = tk.Button(root, text=algo, command=lambda a=algo: on_button_click(a), bg='lightblue', font=('Helvetica', 12))
+    button = tk.Button(button_inner_frame, text=algo, command=lambda a=algo: execute_algorithm(a), bg='lightblue', font=('Helvetica', 12))
     button.pack(pady=5, padx=10)
+
+# Update the scroll region
+button_inner_frame.update_idletasks()
+button_canvas.config(scrollregion=button_canvas.bbox("all"))
+
+# Frame for the explanation text on the right
+explanation_text = scrolledtext.ScrolledText(root, width=60, height=20, font=('Helvetica', 10))
+explanation_text.pack(side=tk.RIGHT, padx=10, pady=10)
 
 # Override close window event
 def on_closing():
