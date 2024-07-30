@@ -280,6 +280,19 @@ def fibonacci(n):
         fib_sequence.append(fib_sequence[i-1] + fib_sequence[i-2])
     return fib_sequence
 
+# Function to create buttons in columns
+def create_buttons(inner_frame):
+    algorithms = [
+        "Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort",
+        "KMP Search", "Dijkstra's Algorithm", "Prim's Algorithm", 
+        "Kruskal's Algorithm", "Fibonacci"
+    ]
+
+    # Create buttons in multiple columns
+    for i, algo in enumerate(algorithms):
+        button = tk.Button(inner_frame, text=algo, command=lambda a=algo: execute_algorithm(a), bg='lightblue', font=('Helvetica', 12))
+        button.grid(row=i % 6, column=i // 6, pady=5, padx=10)
+
 # Execute the selected algorithm
 def execute_algorithm(algorithm):
     plt.ioff()  # Turn off interactive mode
@@ -377,14 +390,8 @@ scrollbar.config(command=button_canvas.yview)
 button_inner_frame = tk.Frame(button_canvas)
 button_canvas.create_window((0, 0), window=button_inner_frame, anchor='nw')
 
-# Create buttons for algorithms
-algorithms = [
-    "Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort",
-    "KMP Search", "Dijkstra's Algorithm", "Prim's Algorithm", "Kruskal's Algorithm", "Fibonacci"
-]
-for algo in algorithms:
-    button = tk.Button(button_inner_frame, text=algo, command=lambda a=algo: execute_algorithm(a), bg='lightblue', font=('Helvetica', 12))
-    button.pack(pady=5, padx=10)
+# Create buttons
+create_buttons(button_inner_frame)
 
 # Update the scroll region
 button_inner_frame.update_idletasks()
