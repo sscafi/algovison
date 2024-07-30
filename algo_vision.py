@@ -134,7 +134,7 @@ def visualize(text, title="Visualization"):
     plt.ylabel('Character')
     plt.xticks(range(len(arr)), arr)
     plt.ylim(0, 255)  # Characters range
-    plt.pause(0.1)
+    plt.show(block=False)  # Non-blocking show for Matplotlib
 
 # Visualization function for sorting algorithms
 def draw(arr):
@@ -241,77 +241,79 @@ def fibonacci(n):
         fib.append(fib[i-1] + fib[i-2])
     return fib
 
-# Algorithm execution
+# Execute Algorithm
 def execute_algorithm(algorithm):
-    if algorithm in ["Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort"]:
-        array = [random.randint(1, 100) for _ in range(20)]
-        plt.ion()
-        draw(array)
+    if root.winfo_exists():  # Check if the root window still exists
+        if algorithm in ["Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort"]:
+            array = [random.randint(1, 100) for _ in range(20)]
+            plt.ion()
+            draw(array)
 
-        if algorithm == "Bubble Sort":
-            bubble_sort(array, draw, 0.1)
-        elif algorithm == "Insertion Sort":
-            insertion_sort(array, draw, 0.1)
-        elif algorithm == "Quick Sort":
-            quick_sort(array, 0, len(array) - 1, draw, 0.1)
-        elif algorithm == "Merge Sort":
-            merge_sort(array, draw, 0.1)
+            if algorithm == "Bubble Sort":
+                bubble_sort(array, draw, 0.1)
+            elif algorithm == "Insertion Sort":
+                insertion_sort(array, draw, 0.1)
+            elif algorithm == "Quick Sort":
+                quick_sort(array, 0, len(array) - 1, draw, 0.1)
+            elif algorithm == "Merge Sort":
+                merge_sort(array, draw, 0.1)
 
-        plt.ioff()
-        plt.show()
-    
-    elif algorithm == "KMP Search":
-        text = "ababcababcabc"
-        pattern = "abc"
-        index = kmp_search(text, pattern)
-        if index != -1:
-            visualize(text, title=f'KMP Search - Found at index {index}')
-        else:
-            messagebox.showinfo("Result", "Pattern not found")
-    
-    elif algorithm == "Dijkstra's Algorithm":
-        graph = {
-            'A': {'B': 1, 'C': 4},
-            'B': {'A': 1, 'C': 2, 'D': 5},
-            'C': {'A': 4, 'B': 2, 'D': 1},
-            'D': {'B': 5, 'C': 1}
-        }
-        distances = dijkstra(graph, 'A')
-        messagebox.showinfo("Dijkstra's Algorithm", f"Distances from A: {distances}")
-    
-    elif algorithm == "Prim's Algorithm":
-        graph = {
-            'A': {'B': 1, 'C': 4},
-            'B': {'A': 1, 'C': 2, 'D': 5},
-            'C': {'A': 4, 'B': 2, 'D': 1},
-            'D': {'B': 5, 'C': 1}
-        }
-        mst = prim(graph)
-        messagebox.showinfo("Prim's Algorithm", f"Minimum Spanning Tree: {mst}")
-    
-    elif algorithm == "Kruskal's Algorithm":
-        graph = {
-            'A': {'B': 1, 'C': 4},
-            'B': {'A': 1, 'C': 2, 'D': 5},
-            'C': {'A': 4, 'B': 2, 'D': 1},
-            'D': {'B': 5, 'C': 1}
-        }
-        mst = kruskal(graph)
-        messagebox.showinfo("Kruskal's Algorithm", f"Minimum Spanning Tree: {mst}")
+            plt.ioff()
+            plt.show()  # Show the plot window
 
-    elif algorithm == "Fibonacci":
-        n = 10  # Calculate first 10 Fibonacci numbers
-        fib_sequence = fibonacci(n)
-        plt.ion()
-        draw(fib_sequence)
-        plt.ioff()
-        plt.show()
+        elif algorithm == "KMP Search":
+            text = "ababcababcabc"
+            pattern = "abc"
+            index = kmp_search(text, pattern)
+            if index != -1:
+                visualize(text, title=f'KMP Search - Found at index {index}')
+            else:
+                messagebox.showinfo("Result", "Pattern not found")
+
+        elif algorithm == "Dijkstra's Algorithm":
+            graph = {
+                'A': {'B': 1, 'C': 4},
+                'B': {'A': 1, 'C': 2, 'D': 5},
+                'C': {'A': 4, 'B': 2, 'D': 1},
+                'D': {'B': 5, 'C': 1}
+            }
+            distances = dijkstra(graph, 'A')
+            messagebox.showinfo("Dijkstra's Algorithm", f"Distances from A: {distances}")
+
+        elif algorithm == "Prim's Algorithm":
+            graph = {
+                'A': {'B': 1, 'C': 4},
+                'B': {'A': 1, 'C': 2, 'D': 5},
+                'C': {'A': 4, 'B': 2, 'D': 1},
+                'D': {'B': 5, 'C': 1}
+            }
+            mst = prim(graph)
+            messagebox.showinfo("Prim's Algorithm", f"Minimum Spanning Tree: {mst}")
+
+        elif algorithm == "Kruskal's Algorithm":
+            graph = {
+                'A': {'B': 1, 'C': 4},
+                'B': {'A': 1, 'C': 2, 'D': 5},
+                'C': {'A': 4, 'B': 2, 'D': 1},
+                'D': {'B': 5, 'C': 1}
+            }
+            mst = kruskal(graph)
+            messagebox.showinfo("Kruskal's Algorithm", f"Minimum Spanning Tree: {mst}")
+
+        elif algorithm == "Fibonacci":
+            n = 10  # Calculate first 10 Fibonacci numbers
+            fib_sequence = fibonacci(n)
+            plt.ion()
+            draw(fib_sequence)
+            plt.ioff()
+            plt.show()  # Wait for user to close the plot
 
 # GUI setup
 root = tk.Tk()
 root.title("Algorithm Visualizer")
 
 def on_button_click(algorithm):
+    # Execute the selected algorithm
     execute_algorithm(algorithm)
 
 # Create buttons for algorithms
