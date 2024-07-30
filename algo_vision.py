@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import heapq
 
+# Global variable to track if the GUI is active
+gui_active = True
+
 # Example sorting algorithms
 def bubble_sort(arr, draw, pause):
     n = len(arr)
@@ -15,6 +18,8 @@ def bubble_sort(arr, draw, pause):
                 arr[j], arr[j+1] = arr[j+1], arr[j]
                 draw(arr)
                 time.sleep(pause)
+                if not gui_active:  # Check if GUI is active
+                    return  # Exit if GUI is closed
 
 def insertion_sort(arr, draw, pause):
     for i in range(1, len(arr)):
@@ -26,6 +31,8 @@ def insertion_sort(arr, draw, pause):
         arr[j + 1] = key
         draw(arr)
         time.sleep(pause)
+        if not gui_active:  # Check if GUI is active
+            return  # Exit if GUI is closed
 
 def quick_sort(arr, low, high, draw, pause):
     if low < high:
@@ -42,6 +49,8 @@ def partition(arr, low, high, draw, pause):
             arr[i], arr[j] = arr[j], arr[i]
             draw(arr)
             time.sleep(pause)
+            if not gui_active:  # Check if GUI is active
+                return  # Exit if GUI is closed
     arr[i + 1], arr[high] = arr[high], arr[i + 1]
     draw(arr)
     time.sleep(pause)
@@ -66,6 +75,8 @@ def merge_sort(arr, draw, pause):
                 j += 1
             draw(arr)
             time.sleep(pause)
+            if not gui_active:  # Check if GUI is active
+                return  # Exit if GUI is closed
             k += 1
 
         while i < len(L):
@@ -74,6 +85,8 @@ def merge_sort(arr, draw, pause):
             k += 1
             draw(arr)
             time.sleep(pause)
+            if not gui_active:  # Check if GUI is active
+                return  # Exit if GUI is closed
 
         while j < len(R):
             arr[k] = R[j]
@@ -81,6 +94,8 @@ def merge_sort(arr, draw, pause):
             k += 1
             draw(arr)
             time.sleep(pause)
+            if not gui_active:  # Check if GUI is active
+                return  # Exit if GUI is closed
 
 # KMP Search Algorithm
 def kmp_search(text, pattern):
@@ -243,7 +258,7 @@ def fibonacci(n):
 
 # Execute Algorithm
 def execute_algorithm(algorithm):
-    if root.winfo_exists():  # Check if the root window still exists
+    if gui_active:  # Check if the GUI is active
         if algorithm in ["Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort"]:
             array = [random.randint(1, 100) for _ in range(20)]
             plt.ion()
@@ -259,16 +274,13 @@ def execute_algorithm(algorithm):
                 merge_sort(array, draw, 0.1)
 
             plt.ioff()
-            plt.show()  # Show the plot window
+            plt.show()  # Wait for user to close the plot
 
         elif algorithm == "KMP Search":
             text = "ababcababcabc"
             pattern = "abc"
             index = kmp_search(text, pattern)
-            if index != -1:
-                visualize(text, title=f'KMP Search - Found at index {index}')
-            else:
-                messagebox.showinfo("Result", "Pattern not found")
+            visualize(text, title=f'KMP Search - Searching for "{pattern}"')
 
         elif algorithm == "Dijkstra's Algorithm":
             graph = {
@@ -313,8 +325,9 @@ root = tk.Tk()
 root.title("Algorithm Visualizer")
 
 def on_button_click(algorithm):
-    # Execute the selected algorithm
-    execute_algorithm(algorithm)
+    global gui_active  # Allow access to the global variable
+    if gui_active:  # Check if the GUI is active
+        execute_algorithm(algorithm)
 
 # Create buttons for algorithms
 algorithms = [
@@ -324,6 +337,14 @@ algorithms = [
 for algo in algorithms:
     button = tk.Button(root, text=algo, command=lambda a=algo: on_button_click(a), bg='lightblue', font=('Helvetica', 12))
     button.pack(pady=5, padx=10)
+
+# Override close window event
+def on_closing():
+    global gui_active
+    gui_active = False  # Set GUI active flag to False
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)  # Handle the close button
 
 # Run the GUI
 root.mainloop()
