@@ -11,6 +11,8 @@ gui_active = True
 
 # Example sorting algorithms
 def bubble_sort(arr, draw, pause, explain):
+    explain(f'Initial array: {arr}')
+    draw(arr)
     n = len(arr)
     for i in range(n):
         for j in range(0, n-i-1):
@@ -23,6 +25,8 @@ def bubble_sort(arr, draw, pause, explain):
                     return  # Exit if GUI is closed
 
 def insertion_sort(arr, draw, pause, explain):
+    explain(f'Initial array: {arr}')
+    draw(arr)
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
@@ -42,6 +46,8 @@ def insertion_sort(arr, draw, pause, explain):
             return  # Exit if GUI is closed
 
 def quick_sort(arr, low, high, draw, pause, explain):
+    explain(f'Initial array: {arr}')
+    draw(arr)
     if low < high:
         pi = partition(arr, low, high, draw, pause, explain)
         quick_sort(arr, low, pi-1, draw, pause, explain)
@@ -66,6 +72,8 @@ def partition(arr, low, high, draw, pause, explain):
     return i + 1
 
 def merge_sort(arr, draw, pause, explain):
+    explain(f'Initial array: {arr}')
+    draw(arr)
     if len(arr) > 1:
         mid = len(arr) // 2
         L = arr[:mid]
@@ -112,6 +120,7 @@ def merge_sort(arr, draw, pause, explain):
 
 # KMP Search Algorithm
 def kmp_search(text, pattern, explain):
+    explain(f'Text: {text}, Pattern: {pattern}')
     m = len(pattern)
     n = len(text)
 
@@ -180,11 +189,11 @@ def draw(arr):
 
 # Dijkstra's Algorithm
 def dijkstra(graph, start, explain):
+    explain(f'Starting Dijkstra\'s Algorithm from {start}')
     queue = []
     heapq.heappush(queue, (0, start))
     distances = {node: float('inf') for node in graph}
     distances[start] = 0
-    explain(f'Starting Dijkstra\'s Algorithm from {start}')
 
     while queue:
         current_distance, current_node = heapq.heappop(queue)
@@ -241,29 +250,28 @@ def union(parent, rank, x, y):
         rank[xroot] += 1
 
 def kruskal(graph, explain):
-    result = []
-    i = 0
-    e = 0
     edges = []
-    
     for u in graph:
-        for v, w in graph[u].items():
-            edges.append((w, u, v))
+        for v, weight in graph[u].items():
+            edges.append((weight, u, v))
 
     edges = sorted(edges, key=lambda item: item[0])
     parent = {}
     rank = {}
-
     for node in graph:
         parent[node] = node
         rank[node] = 0
+
+    result = []
+    e = 0
+    i = 0
+    explain('Starting Kruskal\'s Algorithm')
 
     while e < len(graph) - 1:
         w, u, v = edges[i]
         i += 1
         x = find(parent, u)
         y = find(parent, v)
-
         if x != y:
             e += 1
             result.append((u, v, w))
@@ -288,21 +296,25 @@ def execute_algorithm(algorithm):
     if algorithm == "Bubble Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
         draw(arr)
+        explain(f'Initial array: {arr}')
         bubble_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "Insertion Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
         draw(arr)
+        explain(f'Initial array: {arr}')
         insertion_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "Quick Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
         draw(arr)
+        explain(f'Initial array: {arr}')
         quick_sort(arr, 0, len(arr) - 1, draw, 0.5, explain)
 
     elif algorithm == "Merge Sort":
         arr = [random.randint(1, 100) for _ in range(10)]
         draw(arr)
+        explain(f'Initial array: {arr}')
         merge_sort(arr, draw, 0.5, explain)
 
     elif algorithm == "KMP Search":
@@ -345,8 +357,9 @@ def execute_algorithm(algorithm):
         fib_sequence = fibonacci(n)
         plt.ion()
         draw(fib_sequence)
-        plt.ioff()
-        plt.show()  # Wait for user to close the plot
+        plt.title("Fibonacci Sequence")
+        plt.show(block=False)  # Non-blocking show for Matplotlib
+        plt.ioff()  # Turn off interactive mode again
 
 # GUI setup
 root = tk.Tk()
