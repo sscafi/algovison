@@ -9,8 +9,18 @@ import heapq
 # Global variable to track if the GUI is active
 gui_active = True
 
-# Example sorting algorithms
+# Sorting Algorithms
+
 def bubble_sort(arr, draw, pause, explain):
+    """
+    Perform Bubble Sort on the given array.
+
+    Parameters:
+        arr (list): The list of elements to be sorted.
+        draw (function): Function to visualize the array.
+        pause (float): Time in seconds to pause between steps.
+        explain (function): Function to provide explanations during sorting.
+    """
     draw(arr)
     n = len(arr)
     for i in range(n):
@@ -20,36 +30,67 @@ def bubble_sort(arr, draw, pause, explain):
                 draw(arr)
                 explain(f'Swapping {arr[j]} and {arr[j+1]}')
                 time.sleep(pause)
-                if not gui_active:  # Check if GUI is active
-                    return  # Exit if GUI is closed
+                if not gui_active:
+                    return
 
 def insertion_sort(arr, draw, pause, explain):
+    """
+    Perform Insertion Sort on the given array.
+
+    Parameters:
+        arr (list): The list of elements to be sorted.
+        draw (function): Function to visualize the array.
+        pause (float): Time in seconds to pause between steps.
+        explain (function): Function to provide explanations during sorting.
+    """
     draw(arr)
     for i in range(1, len(arr)):
         key = arr[i]
-        j = i-1
+        j = i - 1
         while j >= 0 and key < arr[j]:
             arr[j + 1] = arr[j]
             draw(arr)
             explain(f'Moving {arr[j]} to the right')
             time.sleep(pause)
-            if not gui_active:  # Check if GUI is active
-                return  # Exit if GUI is closed
+            if not gui_active:
+                return
             j -= 1
         arr[j + 1] = key
         draw(arr)
         explain(f'Inserting {key} at position {j + 1}')
         time.sleep(pause)
-        if not gui_active:  # Check if GUI is active
-            return  # Exit if GUI is closed
+        if not gui_active:
+            return
 
 def quick_sort(arr, low, high, draw, pause, explain):
+    """
+    Perform Quick Sort on the given array.
+
+    Parameters:
+        arr (list): The list of elements to be sorted.
+        low (int): Starting index of the segment to be sorted.
+        high (int): Ending index of the segment to be sorted.
+        draw (function): Function to visualize the array.
+        pause (float): Time in seconds to pause between steps.
+        explain (function): Function to provide explanations during sorting.
+    """
     if low < high:
         pi = partition(arr, low, high, draw, pause, explain)
         quick_sort(arr, low, pi-1, draw, pause, explain)
         quick_sort(arr, pi+1, high, draw, pause, explain)
 
 def partition(arr, low, high, draw, pause, explain):
+    """
+    Partition the array for Quick Sort.
+
+    Parameters:
+        arr (list): The list of elements to be partitioned.
+        low (int): Starting index of the segment.
+        high (int): Ending index of the segment.
+        draw (function): Function to visualize the array.
+        pause (float): Time in seconds to pause between steps.
+        explain (function): Function to provide explanations during partitioning.
+    """
     pivot = arr[high]
     i = low - 1
     for j in range(low, high):
@@ -59,8 +100,8 @@ def partition(arr, low, high, draw, pause, explain):
             draw(arr)
             explain(f'Swapping {arr[i]} and {arr[j]}')
             time.sleep(pause)
-            if not gui_active:  # Check if GUI is active
-                return  # Exit if GUI is closed
+            if not gui_active:
+                return
     arr[i + 1], arr[high] = arr[high], arr[i + 1]
     draw(arr)
     explain(f'Swapping pivot {pivot} with {arr[i + 1]}')
@@ -68,6 +109,15 @@ def partition(arr, low, high, draw, pause, explain):
     return i + 1
 
 def merge_sort(arr, draw, pause, explain):
+    """
+    Perform Merge Sort on the given array.
+
+    Parameters:
+        arr (list): The list of elements to be sorted.
+        draw (function): Function to visualize the array.
+        pause (float): Time in seconds to pause between steps.
+        explain (function): Function to provide explanations during sorting.
+    """
     if len(arr) > 1:
         mid = len(arr) // 2
         L = arr[:mid]
@@ -88,8 +138,8 @@ def merge_sort(arr, draw, pause, explain):
                 j += 1
             draw(arr)
             time.sleep(pause)
-            if not gui_active:  # Check if GUI is active
-                return  # Exit if GUI is closed
+            if not gui_active:
+                return
             k += 1
 
         while i < len(L):
@@ -99,8 +149,8 @@ def merge_sort(arr, draw, pause, explain):
             k += 1
             draw(arr)
             time.sleep(pause)
-            if not gui_active:  # Check if GUI is active
-                return  # Exit if GUI is closed
+            if not gui_active:
+                return
 
         while j < len(R):
             arr[k] = R[j]
@@ -109,15 +159,24 @@ def merge_sort(arr, draw, pause, explain):
             k += 1
             draw(arr)
             time.sleep(pause)
-            if not gui_active:  # Check if GUI is active
-                return  # Exit if GUI is closed
+            if not gui_active:
+                return
 
 # KMP Search Algorithm
+
 def kmp_search(text, pattern, explain):
+    """
+    Perform KMP search to find occurrences of a pattern in a text.
+
+    Parameters:
+        text (str): The text to search within.
+        pattern (str): The pattern to search for.
+        explain (function): Function to provide explanations during the search.
+    """
     m = len(pattern)
     n = len(text)
 
-    # Create lps array
+    # Create lps (Longest Prefix Suffix) array
     lps = [0] * m
     j = 0  # length of previous longest prefix suffix
     compute_lps_array(pattern, m, lps)
@@ -143,6 +202,14 @@ def kmp_search(text, pattern, explain):
     return -1  # Pattern not found
 
 def compute_lps_array(pattern, m, lps):
+    """
+    Compute the LPS array used in KMP search.
+
+    Parameters:
+        pattern (str): The pattern to compute LPS array for.
+        m (int): Length of the pattern.
+        lps (list): The LPS array to be filled.
+    """
     length = 0  # length of the previous longest prefix suffix
     lps[0] = 0  # lps[0] is always 0
     i = 1
@@ -159,7 +226,16 @@ def compute_lps_array(pattern, m, lps):
                 lps[i] = 0
                 i += 1
 
+# Visualization Functions
+
 def visualize(text, title="Visualization"):
+    """
+    Visualize the given text as a bar chart.
+
+    Parameters:
+        text (str): The text to be visualized.
+        title (str): The title of the visualization.
+    """
     plt.clf()
     arr = list(text)
     plt.bar(range(len(arr)), arr, color='skyblue')
@@ -170,8 +246,13 @@ def visualize(text, title="Visualization"):
     plt.ylim(0, 255)  # Characters range
     plt.show(block=False)  # Non-blocking show for Matplotlib
 
-# Visualization function for sorting algorithms
 def draw(arr):
+    """
+    Visualize the given array as a bar chart for sorting algorithms.
+
+    Parameters:
+        arr (list): The list of elements to be visualized.
+    """
     plt.clf()
     plt.bar(range(len(arr)), arr, color='cornflowerblue')
     plt.title('Sorting Algorithm Visualization')
@@ -180,8 +261,29 @@ def draw(arr):
     plt.ylim(0, max(arr) + 10)
     plt.pause(0.1)
 
-# Dijkstra's Algorithm
+# Graph Algorithms
+
 def dijkstra(graph, start, explain):
+    """
+    Perform Dijkstra's Algorithm to find the shortest paths from the start node.
+
+    Parameters:
+        graph (dict): The graph represented as an adjacency list.
+        start: The starting node for the algorithm.
+        explain (function): Function to provide explanations during the algorithm.
+    """
+    explain(f'Starting Dijkstra\'s Algorithm from {start}')
+    queue = []
+    heapq
+def dijkstra(graph, start, explain):
+    """
+    Perform Dijkstra's Algorithm to find the shortest paths from the start node.
+
+    Parameters:
+        graph (dict): The graph represented as an adjacency list.
+        start: The starting node for the algorithm.
+        explain (function): Function to provide explanations during the algorithm.
+    """
     explain(f'Starting Dijkstra\'s Algorithm from {start}')
     queue = []
     heapq.heappush(queue, (0, start))
@@ -204,9 +306,15 @@ def dijkstra(graph, start, explain):
 
     return distances
 
-# Prim's Algorithm
 def prim(graph, explain):
-    start = next(iter(graph))
+    """
+    Perform Prim's Algorithm to find the Minimum Spanning Tree (MST).
+
+    Parameters:
+        graph (dict): The graph represented as an adjacency list.
+        explain (function): Function to provide explanations during the algorithm.
+    """
+    start = next(iter(graph))  # Start from an arbitrary node
     visited = {start}
     edges = [(cost, start, to) for to, cost in graph[start].items()]
     heapq.heapify(edges)
@@ -225,13 +333,31 @@ def prim(graph, explain):
     
     return mst
 
-# Kruskal's Algorithm
 def find(parent, i):
+    """
+    Find the root of the set containing i.
+
+    Parameters:
+        parent (dict): Dictionary of parent nodes.
+        i: Node to find the root for.
+    
+    Returns:
+        The root of the set containing i.
+    """
     if parent[i] == i:
         return i
     return find(parent, parent[i])
 
 def union(parent, rank, x, y):
+    """
+    Union the sets containing x and y.
+
+    Parameters:
+        parent (dict): Dictionary of parent nodes.
+        rank (dict): Dictionary of ranks for union by rank.
+        x: First node.
+        y: Second node.
+    """
     xroot = find(parent, x)
     yroot = find(parent, y)
     if rank[xroot] < rank[yroot]:
@@ -243,6 +369,13 @@ def union(parent, rank, x, y):
         rank[xroot] += 1
 
 def kruskal(graph, explain):
+    """
+    Perform Kruskal's Algorithm to find the Minimum Spanning Tree (MST).
+
+    Parameters:
+        graph (dict): The graph represented as an adjacency list.
+        explain (function): Function to provide explanations during the algorithm.
+    """
     edges = []
     for u in graph:
         for v, weight in graph[u].items():
@@ -274,27 +407,50 @@ def kruskal(graph, explain):
     return result
 
 # Fibonacci Sequence
+
 def fibonacci(n):
+    """
+    Generate the Fibonacci sequence up to the nth number.
+
+    Parameters:
+        n (int): The number of Fibonacci numbers to generate.
+    
+    Returns:
+        list: A list containing the Fibonacci sequence up to the nth number.
+    """
     fib_sequence = [0, 1]
     for i in range(2, n):
         fib_sequence.append(fib_sequence[i-1] + fib_sequence[i-2])
     return fib_sequence
 
 # Function to create buttons in columns
+
 def create_buttons(inner_frame):
+    """
+    Create buttons for selecting algorithms and add them to the given frame.
+
+    Parameters:
+        inner_frame (tk.Frame): The frame where buttons will be placed.
+    """
     algorithms = [
         "Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort",
         "KMP Search", "Dijkstra's Algorithm", "Prim's Algorithm", 
         "Kruskal's Algorithm", "Fibonacci"
     ]
 
-    # Create buttons in multiple columns
     for i, algo in enumerate(algorithms):
         button = tk.Button(inner_frame, text=algo, command=lambda a=algo: execute_algorithm(a), bg='lightblue', font=('Helvetica', 12))
         button.grid(row=i % 6, column=i // 6, pady=5, padx=10)
 
 # Execute the selected algorithm
+
 def execute_algorithm(algorithm):
+    """
+    Execute the selected algorithm and visualize its results.
+
+    Parameters:
+        algorithm (str): The name of the algorithm to execute.
+    """
     plt.ioff()  # Turn off interactive mode
     explanation_text.delete(1.0, tk.END)  # Clear previous explanation
     explain = lambda text: explanation_text.insert(tk.END, text + '\n')  # Function to update explanation
@@ -368,46 +524,21 @@ def execute_algorithm(algorithm):
         plt.ioff()  # Turn off interactive mode again
 
 # GUI setup
+
 root = tk.Tk()
 root.title("Algorithm Visualizer")
 
-# Create a frame for buttons on the left
+# Create a frame for buttons
 button_frame = tk.Frame(root)
 button_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
-# Create a scrollable frame for buttons
-scrollbar = tk.Scrollbar(button_frame)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+# Create a frame for explanations
+explanation_frame = tk.Frame(root)
+explanation_frame.pack(side=tk.RIGHT, padx=10, pady=10)
 
-# Create a canvas to hold the buttons
-button_canvas = tk.Canvas(button_frame, yscrollcommand=scrollbar.set)
-button_canvas.pack(side=tk.LEFT)
+explanation_text = scrolledtext.ScrolledText(explanation_frame, width=40, height=20, wrap=tk.WORD)
+explanation_text.pack()
 
-# Configure the scrollbar
-scrollbar.config(command=button_canvas.yview)
+create_buttons(button_frame)
 
-# Create a frame for the buttons inside the canvas
-button_inner_frame = tk.Frame(button_canvas)
-button_canvas.create_window((0, 0), window=button_inner_frame, anchor='nw')
-
-# Create buttons
-create_buttons(button_inner_frame)
-
-# Update the scroll region
-button_inner_frame.update_idletasks()
-button_canvas.config(scrollregion=button_canvas.bbox("all"))
-
-# Frame for the explanation text on the right
-explanation_text = scrolledtext.ScrolledText(root, width=60, height=20, font=('Helvetica', 10))
-explanation_text.pack(side=tk.RIGHT, padx=10, pady=10)
-
-# Override close window event
-def on_closing():
-    global gui_active
-    gui_active = False  # Set GUI active flag to False
-    root.destroy()
-
-root.protocol("WM_DELETE_WINDOW", on_closing)  # Handle the close button
-
-# Run the GUI
 root.mainloop()
