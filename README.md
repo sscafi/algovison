@@ -1,6 +1,6 @@
 # Algorithm Visualizer
 
-This project is an interactive algorithm visualizer built using Python. It allows users to visualize various algorithms, including sorting algorithms, searching algorithms, graph algorithms, and dynamic programming algorithms. The visualization helps in understanding how each algorithm works step-by-step..
+This project is an interactive algorithm visualizer built using Python. It allows users to visualize various algorithms, including sorting algorithms, searching algorithms, graph algorithms, and dynamic programming algorithms. The visualization helps in understanding how each algorithm works step-by-step.
 
 ## Features
 
